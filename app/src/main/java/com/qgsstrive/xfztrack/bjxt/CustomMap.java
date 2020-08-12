@@ -70,6 +70,10 @@ public class CustomMap extends View {
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeJoin(Paint.Join.ROUND);
 
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        Log.e("444444",width + "  " + height);
+
         //第5条线（50-800）
         canvas.drawLine(50, 90, 800, 90, mPaint);
         canvas.drawLine(800, 90, 950, 70, mPaint);

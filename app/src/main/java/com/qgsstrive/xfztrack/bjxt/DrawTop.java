@@ -34,7 +34,7 @@ public class DrawTop extends View {
 
     public DrawTop(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mBitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.train2);
+        mBitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.train);
     }
 
     @Override

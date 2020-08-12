@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qgsstrive.xfztrack.bjxt.DrawTop;
+import com.qgsstrive.xfztrack.bjxt.FlashHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -20,7 +21,7 @@ import java.util.TimerTask;
 
 import util.HexUtil;
 
-public class TestActivity extends SerialPortActivity {
+public class TestActivity extends AppCompatActivity {
 
     private Context mContext = null;
 
@@ -112,7 +113,7 @@ public class TestActivity extends SerialPortActivity {
         //startTimer();
     }
 
-    @Override
+    /*@Override
     protected void onDataReceived(final byte[] buffer, final int size, final int type) {
         runOnUiThread(new Runnable() {
             @Override
@@ -138,7 +139,7 @@ public class TestActivity extends SerialPortActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void initView() {
         map = findViewById(R.id.draw);
@@ -153,7 +154,13 @@ public class TestActivity extends SerialPortActivity {
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendHexString(data.replaceAll("\\s*", ""), "485");
+                //sendHexString(data.replaceAll("\\s*", ""), "485");
+            }
+        });
+        mReceived.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlashHelper.getInstance().startFlick(mText);
             }
         });
     }

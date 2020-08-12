@@ -4,25 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".CustomActivity">
 
-    <!--<com.qgsstrive.xfztrack.bjxt.DrawMap
-        android:id="@+id/drawmap"
-        android:largeHeap="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-
-    <!--<com.qgsstrive.xfztrack.bjxt.DrawTop
-        android:id="@+id/drawtop"
-        android:layout_width="match_parent"
-        android:layout_height="430dp" />-->
     <com.qgsstrive.xfztrack.bjxt.DefinitionMap
-        android:id="@+id/custommap"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.qgsstrive.xfztrack.bjxt.DrawTop
-        android:id="@+id/drawtop"
+        android:id="@+id/trainicon"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <TextView
@@ -33,14 +22,4 @@
         android:layout_marginTop="10dp"
         android:textColor="#F70505"
         android:textSize="20sp" />
-    <TextView
-        android:id="@+id/onetext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"/>
-    <TextView
-        android:id="@+id/twotext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"/>
 </RelativeLayout>

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qgsstrive.xfztrack.bjxt.CustomMap;
+import com.qgsstrive.xfztrack.bjxt.DefinitionMap;
 import com.qgsstrive.xfztrack.bjxt.DrawMap;
 import com.qgsstrive.xfztrack.bjxt.DrawTop;
 import com.qgsstrive.xfztrack.bjxt.GPSPointF;
@@ -34,6 +35,7 @@ import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import util.ByteUtil;
 import util.HexUtil;
 
 public class MainActivity extends SerialPortActivity implements View.OnClickListener {
@@ -48,11 +50,11 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     String data = "41 54 2B 54 58 44 3D 01 00 10 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 67 0D 0A";
     private String mEncodeHexStr;
-    private String mSubstring;
+    private String mTail;
 
     static int x, y;
     public static GPSPointF gpsPoint = new GPSPointF(x, y);
-    private CustomMap mCustommap;
+    private DefinitionMap mCustommap;
     private String mTrack;
     boolean aa = false;
     boolean bb = false;
@@ -67,302 +69,707 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     boolean a5 = false;
     boolean a6 = false;
     private String mDistance;
+    //小车纵向减
+    int disparity = 25;
+    //小车横向减
+    int transverse = 20;
+    int mTime = 800;
+    int tota = 100;
+    private String mHeader;
+    private TextView mTwotext;
+    private TextView mFirsttext;
 
     @Override
     protected void onDataReceived(final byte[] buffer, final int size, final int type) {
+        String toString = buffer.toString();
+        char[] chars = HexUtil.encodeHex(buffer);
+        mEncodeHexStr = ByteUtil.bytes2HexString(buffer, size);
+        Log.e("121212",mEncodeHexStr+"      121212");
+        //mEncodeHexStr = HexUtil.encodeHexStr(buffer, false, size);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.i("testData", "ddddddddd");
                 try {
                     if (type == 485) {
-                        mEncodeHexStr = HexUtil.encodeHexStr(buffer, false, size);
-                        mSubstring = mEncodeHexStr.substring(mEncodeHexStr.length() - 2, mEncodeHexStr.length());
-                        Log.i("testData", "485555数据: " + HexUtil.encodeHexStr(buffer, false, size));
+                        //int length = mEncodeHexStr.length();
+                        mHeader = mEncodeHexStr.substring(0, 2);
+                        //mTail = mEncodeHexStr.substring(mEncodeHexStr.length() - 2, mEncodeHexStr.length());
+                        //Log.i("TAG串口打开", mHeader + "帧头"+length);
+                        //Log.i("testData", "485数据: " + HexUtil.encodeHexStr(buffer, false, size));
 //                    Log.i("这是485收到的数据",MainActivity.this.toString(buffer,size,0));
-                        Log.i("TAG串口打开", String.valueOf(type));
+                        /*Log.i("TAG串口打开", String.valueOf(type));
                         Log.i("TAGbuffer[0]", String.valueOf(buffer[0]));
                         Log.i("TAG_size", "定位协议的长度" + String.valueOf(size));
                         Log.i("hexStr", mEncodeHexStr + "    hexStr");
-                        Log.i("substring", mSubstring + "    substring");
+                        Log.i("substring", mTail + "    substring");*/
                         mTitle.setText(mEncodeHexStr);
-                        //股道数
-                        mTrack = mEncodeHexStr.substring(6, 8);
                         //行车数
                         String car = mEncodeHexStr.substring(4, 6);
+                        //股道数
+                        mTrack = mEncodeHexStr.substring(6, 8);
                         //距离
                         mDistance = mEncodeHexStr.substring(8, 10);
+                        //int hh = Integer.parseInt(mDistance);
                         int h = Integer.parseInt(mDistance, 16);
                         int track1 = Integer.parseInt(mTrack, 16);
                         String valueOf = String.valueOf(track1);
-                        Log.e("十六进制十进制", track1 + "    十进制");
-                        if (valueOf.equals("05")) {
-                            if (aa == false) {
-                                mDrawTop.setTranslationX(100);
-                                mDrawTop.setTranslationY(90);
-                                aa = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100+h * 7f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  05  " + translationY);
-                            } else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100+h * 7f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  05  " + translationY);
+                        Log.e("十六进制十进制", h + "    " + track1 + "    " + mEncodeHexStr + "    十进制");
+                        mDrawTop.invalidate();
+                        if (mHeader.equals("A7")) {
+                            if (valueOf.equals("05")) {
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (aa == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(90 - disparity);
+                                    aa = true;
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  05  " + translationY);
+                                } else {
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  05  " + translationY);
+                                }
                             }
-                        }
-                        if (valueOf.equals("06")) {
-                            if (bb == false) {
-                                mDrawTop.setTranslationX(100);
-                                mDrawTop.setTranslationY(150);
-                                bb = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 6.5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            } else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 6.5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  06  " + translationY);
+                            if (valueOf.equals("06")) {
+                                aa = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (bb == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(150 - disparity);
+                                    bb = true;
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                } else {
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  06  " + translationY);
+                                }
                             }
-                        }
-                        if (valueOf.equals("07")) {
-                            if (cc == false) {
-                                mDrawTop.setTranslationX(160);
-                                mDrawTop.setTranslationY(220);
-                                cc = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 160 + h * 6.4f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            } else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 160 + h * 6.4f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  07  " + translationY);
+                            if (mTrack.equals("07")) {
+                                aa = false;
+                                bb = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (cc == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(210 - disparity);
+                                    cc = true;
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                } else {
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  07  " + translationY);
+                                }
                             }
-                        }
-                        if (valueOf.equals("08")) {
-                            if (dd == false) {
-                                mDrawTop.setTranslationX(200);
-                                mDrawTop.setTranslationY(280);
-                                dd = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 200 + h * 6f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 200 + h * 6f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  08  " + translationY);
+                            if (mTrack.equals("08")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (dd == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(270 - disparity);
+                                    dd = true;
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                } else {
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  08  " + translationY);
+                                }
                             }
-                        }
-                        if (valueOf.equals("09")) {
-                            if (ee == false) {
-                                mDrawTop.setTranslationX(220);
-                                mDrawTop.setTranslationY(340);
-                                ee = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 220 + h * 5.6f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 220 + h * 5.6f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  09  " + translationY);
+                            if (mTrack.equals("09")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (ee == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(330 - disparity);
+                                    ee = true;
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                } else {
+                                    float translationX = mDrawTop.getTranslationX();
+                                    float translationY = mDrawTop.getTranslationY();
+                                    ObjectAnimator animator
+                                            = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 9.2f);
+                                    animator.setDuration(mTime);
+                                    animator.start();
+                                    Log.e("123456", translationX + "  09  " + translationY);
 
+                                }
+                            }
+                            if (valueOf.equals("10")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (ff == false) {
+                                    mDrawTop.setTranslationX(110 - transverse);
+                                    mDrawTop.setTranslationY(330);
+                                    ff = true;
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 90 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 310 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(370);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 150 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                } else {
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 90 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 310 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(370);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 150 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("11")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (a1 == false) {
+                                    mDrawTop.setTranslationX(190 - transverse);
+                                    mDrawTop.setTranslationY(390);
+                                    a1 = true;
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 170 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(430);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 150 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                } else {
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 170 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(430);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 150 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("12")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (a2 == false) {
+                                    mDrawTop.setTranslationX(290 - transverse);
+                                    mDrawTop.setTranslationY(450);
+                                    a2 = true;
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 430 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 5 && h < 90) {
+                                        mDrawTop.setTranslationY(490);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 290 + h * 6.7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    } else if (h >= 90 && h < 100) {
+                                        mDrawTop.setTranslationY(490);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 890 + h * 0.2f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 510 - h * 0.6f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    }
+                                } else {
+                                    if (h <= 5) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 8f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 430 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 5 && h < 90) {
+                                        mDrawTop.setTranslationY(490);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 290 + h * 6.7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    } else if (h >= 90 && h < 100) {
+                                        mDrawTop.setTranslationY(490);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 890 + h * 0.2f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 510 - h * 0.6f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("13")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a4 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (a3 == false) {
+                                    mDrawTop.setTranslationX(50 - transverse);
+                                    mDrawTop.setTranslationY(390);
+                                    a3 = true;
+                                    if (h <= 20) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 11.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 9f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(550);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 6.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                } else {
+                                    if (h <= 20) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 11.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 9f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(550);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 6.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("14")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a5 = false;
+                                a6 = false;
+                                if (a4 == false) {
+                                    mDrawTop.setTranslationX(85 - transverse);
+                                    mDrawTop.setTranslationY(420);
+                                    a4 = true;
+                                    if (h <= 15) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 65 + h * 13f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 400 + h * 14);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(610);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 85 + h * 7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                } else {
+                                    if (h <= 15) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 65 + h * 13f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 400 + h * 14f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else {
+                                        mDrawTop.setTranslationY(610);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 85 + h * 7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("15")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a6 = false;
+                                if (a5 == false) {
+                                    mDrawTop.setTranslationX(50);
+                                    mDrawTop.setTranslationY(450 - disparity);
+                                    a5 = true;
+                                    if (h <= 20) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 11.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 430 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 20 && h <= 90) {
+                                        mDrawTop.setTranslationY(670);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 50 + h * 7.6f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    } else if (h > 90) {
+                                        mDrawTop.setTranslationY(670);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 800 + h * 0.4f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 690 - h * 1.3f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    }
+                                } else {
+                                    if (h <= 20) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 11.5f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 430 + h * 12f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 20 && h <= 90) {
+                                        mDrawTop.setTranslationY(670);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 50 + h * 7.6f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                    } else if (h > 90) {
+                                        mDrawTop.setTranslationY(670);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 800 + h * 0.4f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 690 - h * 1.1f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    }
+                                }
+                            }
+                            if (valueOf.equals("16")) {
+                                aa = false;
+                                bb = false;
+                                cc = false;
+                                dd = false;
+                                ee = false;
+                                ff = false;
+                                a1 = false;
+                                a2 = false;
+                                a3 = false;
+                                a4 = false;
+                                a5 = false;
+                                if (a6 == false) {
+                                    a6 = true;
+                                    mDrawTop.setTranslationX(75 - transverse);
+                                    mDrawTop.setTranslationY(480);
+                                    if (h <= 15) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 13.7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 460 + h * 18f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 15 && h <= 80) {
+                                        mDrawTop.setTranslationY(730);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 10f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        Log.e("123456", translationX + "  16  " + translationY);
+                                    } else if (h > 80) {
+                                        //mDrawTop.setTranslationX(830);
+                                        mDrawTop.setTranslationY(730);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 830 + h * 0.9f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 750 - h * 1.8f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    }
+                                } else {
+                                    if (h <= 15) {
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 13.7f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 460 + h * 18f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                    } else if (h > 15 && h <= 80) {
+                                        mDrawTop.setTranslationY(730);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 10f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        Log.e("123456", translationX + "  16  " + translationY);
+                                    } else if (h > 80) {
+                                        //mDrawTop.setTranslationX(830);
+                                        mDrawTop.setTranslationY(730);
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 830 + h * 0.9f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 750 - h * 1.8f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
+                                        Log.e("123456", translationX + "  16  " + translationY);
+                                    }
+                                }
                             }
                         }
-                        if (valueOf.equals("10")) {
-                            if (ff == false) {
-                                mDrawTop.setTranslationX(250);
-                                mDrawTop.setTranslationY(400);
-                                ff = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 5.3f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 5.3f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  10  " + translationY);
-
-                            }
-                        }
-                        if (valueOf.equals("11")) {
-                            if (a1 == false) {
-                                mDrawTop.setTranslationX(280);
-                                mDrawTop.setTranslationY(460);
-                                a1 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 280 + h * 5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 280 + h * 5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  11  " + translationY);
-
-                            }
-                        }
-                        if (valueOf.equals("12")) {
-                            if (a2 == false) {
-                                mDrawTop.setTranslationX(300);
-                                mDrawTop.setTranslationY(520);
-                                a2 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 300 + h * 4f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 300 + h * 4f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  12  " + translationY);
-                            }
-                        }
-                        if (valueOf.equals("13")) {
-                            if (a3 == false) {
-                                mDrawTop.setTranslationX(280);
-                                mDrawTop.setTranslationY(580);
-                                a3 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 280 + h * 4.1f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 280 + h * 4.1f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  13  " + translationY);
-                            }
-                        }
-                        if (valueOf.equals("14")) {
-                            if (a4 == false) {
-                                mDrawTop.setTranslationX(270);
-                                mDrawTop.setTranslationY(630);
-                                a4 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 4.2f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 4.2f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  14  " + translationY);
-                            }
-                        }
-                        if (valueOf.equals("15")) {
-                            if (a5 == false) {
-                                mDrawTop.setTranslationX(270);
-                                mDrawTop.setTranslationY(680);
-                                a5 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 4.2f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 270 + h * 4.2f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  15  " + translationY);
-                            }
-                        }
-                        if (valueOf.equals("16")) {
-                            if (a6 == false) {
-                                mDrawTop.setTranslationX(250);
-                                mDrawTop.setTranslationY(730);
-                                a6 = true;
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 4.5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                            }else {
-                                float translationX = mDrawTop.getTranslationX();
-                                float translationY = mDrawTop.getTranslationY();
-                                ObjectAnimator animator
-                                        = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 4.5f);
-                                animator.setDuration(1500);
-                                animator.start();
-                                Log.e("123456", translationX + "  16  " + translationY);
-                            }
-                        }
-                        /*float translationX = mDrawTop.getTranslationX();
-                        float translationY = mDrawTop.getTranslationY();
-                        ObjectAnimator animator
-                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", translationX + 50*6f);
-                        animator.setDuration(1500);
-                        animator.start();
-                        Log.e("123456",translationX+"  11  "+translationY);*/
-                        /*ObjectAnimator animator1
-                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", translationY + 100f);
-                        animator1.setDuration(2000);
-                        animator1.start();*/
                     } else if (type == 232) {
                         Toast.makeText(mContext, "232串口", Toast.LENGTH_SHORT).show();
                     }
@@ -372,9 +779,6 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
             }
         });
     }
-
-    int a = 100;
-    int b = 90;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,8 +801,10 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         mTitle.setText("香坊站");
         mTitle.setOnClickListener(this);
         mDrawTop = findViewById(R.id.drawtop);
-        /*mDrawTop.setTranslationX(100);
-        mDrawTop.setTranslationY(90);*/
+        mFirsttext = findViewById(R.id.onetext);
+        mTwotext = findViewById(R.id.twotext);
+        /*mDrawTop.setTranslationX(50-20);
+        mDrawTop.setTranslationY(90 - disparity);*/
     }
 
     /**
