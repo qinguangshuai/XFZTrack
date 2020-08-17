@@ -81,17 +81,17 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     @Override
     protected void onDataReceived(final byte[] buffer, final int size, final int type) {
-        String toString = buffer.toString();
-        char[] chars = HexUtil.encodeHex(buffer);
-        mEncodeHexStr = ByteUtil.bytes2HexString(buffer, size);
-        Log.e("121212",mEncodeHexStr+"      121212");
-        //mEncodeHexStr = HexUtil.encodeHexStr(buffer, false, size);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.i("testData", "ddddddddd");
                 try {
                     if (type == 485) {
+                        String toString = buffer.toString();
+                        char[] chars = HexUtil.encodeHex(buffer);
+                        mEncodeHexStr = ByteUtil.bytes2HexString(buffer, size);
+                        Log.e("121212",mEncodeHexStr+"      121212");
+                        //mEncodeHexStr = HexUtil.encodeHexStr(buffer, false, size);
                         //int length = mEncodeHexStr.length();
                         mHeader = mEncodeHexStr.substring(0, 2);
                         //mTail = mEncodeHexStr.substring(mEncodeHexStr.length() - 2, mEncodeHexStr.length());
