@@ -35,12 +35,18 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/onetext"
+        android:text="123"
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"/>
     <TextView
         android:id="@+id/twotext"
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="123"
         android:layout_alignParentRight="true"/>
 </RelativeLayout>

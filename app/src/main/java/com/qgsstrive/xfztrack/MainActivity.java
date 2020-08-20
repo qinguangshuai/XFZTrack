@@ -110,7 +110,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         mTrack = mEncodeHexStr.substring(6, 8);
                         //距离
                         mDistance = mEncodeHexStr.substring(8, 10);
-                        //int hh = Integer.parseInt(mDistance);
+                        int hh = Integer.parseInt(mDistance);
                         int h = Integer.parseInt(mDistance, 16);
                         int track1 = Integer.parseInt(mTrack, 16);
                         String valueOf = String.valueOf(track1);
@@ -512,7 +512,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 6.5f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     }
@@ -533,7 +533,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 30 + h * 6.5f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     }
@@ -571,7 +571,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 85 + h * 7f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 160 + h * 6.1f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     }
@@ -592,7 +592,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 85 + h * 7f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 160 + h * 6.1f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     }
@@ -630,7 +630,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 50 + h * 7.6f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 90 + h * 7.6f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     } else if (h > 90) {
@@ -663,7 +663,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 50 + h * 7.6f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 90 + h * 7.6f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                     } else if (h > 90) {
@@ -713,7 +713,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 10f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 7f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                         Log.e("123456", translationX + "  16  " + translationY);
@@ -748,7 +748,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 55 + h * 10f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 250 + h * 7f);
                                         animator.setDuration(mTime);
                                         animator.start();
                                         Log.e("123456", translationX + "  16  " + translationY);
@@ -772,6 +772,12 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         }
                     } else if (type == 232) {
                         Toast.makeText(mContext, "232串口", Toast.LENGTH_SHORT).show();
+                        //String hexStr = HexUtil.encodeHexStr(buffer, false, size);
+                        String toString = buffer.toString();
+                        char[] chars = HexUtil.encodeHex(buffer);
+                        String bytes2HexString = ByteUtil.bytes2HexString(buffer, size);
+                        mTwotext.setText(bytes2HexString+"");
+                        Log.e("121212",bytes2HexString+"      121212");
                     }
                 } catch (Exception e) {
 
@@ -803,6 +809,13 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         mDrawTop = findViewById(R.id.drawtop);
         mFirsttext = findViewById(R.id.onetext);
         mTwotext = findViewById(R.id.twotext);
+        mFirsttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dat="AA 55";
+                sendHexString(dat.replaceAll("\\s*",""),"232");
+            }
+        });
         /*mDrawTop.setTranslationX(50-20);
         mDrawTop.setTranslationY(90 - disparity);*/
     }

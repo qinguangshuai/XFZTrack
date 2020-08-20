@@ -16,13 +16,13 @@
         android:layout_marginTop="150dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="发送"/>
+        android:text="闪烁"/>
     <Button
         android:id="@+id/received"
         android:layout_below="@id/send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="接收"/>
+        android:text="串口接收"/>
     <TextView
         android:id="@+id/received_text"
         android:layout_width="match_parent"
@@ -32,4 +32,9 @@
         android:textSize="50sp"
         android:textColor="#000"
         android:text="123"/>
+    <EditText
+        android:fitsSystemWindows="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

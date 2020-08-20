@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.qgsstrive.xfztrack.bjxt.DrawTop;
 import com.qgsstrive.xfztrack.bjxt.FlashHelper;
+import com.qgsstrive.xfztrack.bjxt.SpUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -155,12 +156,17 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //sendHexString(data.replaceAll("\\s*", ""), "485");
+                SpUtil sp = new SpUtil(getApplicationContext(),"itcast");
+                sp.setName("aa");
             }
         });
         mReceived.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlashHelper.getInstance().startFlick(mText);
+                //FlashHelper.getInstance().startFlick(mText);
+                SpUtil mSp = new SpUtil(getApplicationContext(),"itcast");
+                String name = mSp.getName();
+                Toast.makeText(getApplication(),name+"    123",Toast.LENGTH_SHORT).show();
             }
         });
     }

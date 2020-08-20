@@ -17,7 +17,9 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon,android:theme">
         <activity android:name=".CustomActivity"></activity>
-        <activity android:name=".TestActivity"></activity>
+        <activity android:name=".TestActivity">
+
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
