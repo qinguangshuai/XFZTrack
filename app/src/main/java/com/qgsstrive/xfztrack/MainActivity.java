@@ -56,18 +56,18 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     public static GPSPointF gpsPoint = new GPSPointF(x, y);
     private DefinitionMap mCustommap;
     private String mTrack;
-    boolean aa = false;
-    boolean bb = false;
-    boolean cc = false;
-    boolean dd = false;
-    boolean ee = false;
-    boolean ff = false;
-    boolean a1 = false;
-    boolean a2 = false;
-    boolean a3 = false;
-    boolean a4 = false;
-    boolean a5 = false;
-    boolean a6 = false;
+    boolean one = false;
+    boolean two = false;
+    boolean three = false;
+    boolean four = false;
+    boolean five = false;
+    boolean six = false;
+    boolean seven = false;
+    boolean eight = false;
+    boolean nine = false;
+    boolean ten = false;
+    boolean eleven = false;
+    boolean twelve = false;
     private String mDistance;
     //小车纵向减
     int disparity = 25;
@@ -76,8 +76,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     int mTime = 800;
     int tota = 100;
     private String mHeader;
-    private TextView mTwotext;
-    private TextView mFirsttext;
+    //private TextView mTwotext;
+    //private TextView mFirsttext;
 
     @Override
     protected void onDataReceived(final byte[] buffer, final int size, final int type) {
@@ -118,21 +118,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         mDrawTop.invalidate();
                         if (mHeader.equals("A7")) {
                             if (valueOf.equals("05")) {
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (aa == false) {
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (one == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(90 - disparity);
-                                    aa = true;
+                                    one = true;
                                     float translationX = mDrawTop.getTranslationX();
                                     float translationY = mDrawTop.getTranslationY();
                                     ObjectAnimator animator
@@ -151,21 +151,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("06")) {
-                                aa = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (bb == false) {
+                                one = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (two == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(150 - disparity);
-                                    bb = true;
+                                    two = true;
                                     float translationX = mDrawTop.getTranslationX();
                                     float translationY = mDrawTop.getTranslationY();
                                     ObjectAnimator animator
@@ -183,21 +183,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (mTrack.equals("07")) {
-                                aa = false;
-                                bb = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (cc == false) {
+                                one = false;
+                                two = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (three == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(210 - disparity);
-                                    cc = true;
+                                    three = true;
                                     float translationX = mDrawTop.getTranslationX();
                                     float translationY = mDrawTop.getTranslationY();
                                     ObjectAnimator animator
@@ -215,21 +215,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (mTrack.equals("08")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (dd == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (four == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(270 - disparity);
-                                    dd = true;
+                                    four = true;
                                     float translationX = mDrawTop.getTranslationX();
                                     float translationY = mDrawTop.getTranslationY();
                                     ObjectAnimator animator
@@ -247,21 +247,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (mTrack.equals("09")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (ee == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (five == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(330 - disparity);
-                                    ee = true;
+                                    five = true;
                                     float translationX = mDrawTop.getTranslationX();
                                     float translationY = mDrawTop.getTranslationY();
                                     ObjectAnimator animator
@@ -280,21 +280,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("10")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (ff == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (six == false) {
                                     mDrawTop.setTranslationX(110 - transverse);
                                     mDrawTop.setTranslationY(330);
-                                    ff = true;
+                                    six = true;
                                     if (h <= 5) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -339,21 +339,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("11")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (a1 == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (seven == false) {
                                     mDrawTop.setTranslationX(190 - transverse);
                                     mDrawTop.setTranslationY(390);
-                                    a1 = true;
+                                    seven = true;
                                     if (h <= 5) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -398,21 +398,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("12")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (a2 == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (eight == false) {
                                     mDrawTop.setTranslationX(290 - transverse);
                                     mDrawTop.setTranslationY(450);
-                                    a2 = true;
+                                    eight = true;
                                     if (h <= 5) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -433,7 +433,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         animator.setDuration(mTime);
                                         animator.start();
                                     } else if (h >= 90 && h < 100) {
-                                        mDrawTop.setTranslationY(490);
+                                        //mDrawTop.setTranslationY(490);
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
@@ -466,7 +466,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                         animator.setDuration(mTime);
                                         animator.start();
                                     } else if (h >= 90 && h < 100) {
-                                        mDrawTop.setTranslationY(490);
+                                        //mDrawTop.setTranslationY(490);
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
@@ -481,21 +481,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("13")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a4 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (a3 == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (nine == false) {
                                     mDrawTop.setTranslationX(50 - transverse);
                                     mDrawTop.setTranslationY(390);
-                                    a3 = true;
+                                    nine = true;
                                     if (h <= 20) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -507,17 +507,28 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                                 = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 9f);
                                         animator1.setDuration(mTime);
                                         animator1.start();
-                                    } else {
+                                    } else if (h>20&&h<=90){
                                         mDrawTop.setTranslationY(550);
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8.8f);
                                         animator.setDuration(mTime);
                                         animator.start();
+                                    }else if (h>90&&h<100){
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 920 + h * 0.2f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 570 - h * 0.7f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
                                     }
                                 } else {
-                                    if (h <= 20) {
+                                    if (h<= 20) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
@@ -528,33 +539,45 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                                 = ObjectAnimator.ofFloat(mDrawTop, "translationY", 370 + h * 9f);
                                         animator1.setDuration(mTime);
                                         animator1.start();
-                                    } else {
+                                    } else if (h>20&&h<=90){
                                         mDrawTop.setTranslationY(550);
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
                                         ObjectAnimator animator
-                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8f);
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 100 + h * 8.8f);
                                         animator.setDuration(mTime);
                                         animator.start();
+                                    }else if (h>90&&h<100){
+                                        float translationX = mDrawTop.getTranslationX();
+                                        float translationY = mDrawTop.getTranslationY();
+                                        ObjectAnimator animator
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationX", 920 + h * 0.2f);
+                                        animator.setDuration(mTime);
+                                        animator.start();
+                                        ObjectAnimator animator1
+                                                = ObjectAnimator.ofFloat(mDrawTop, "translationY", 570 - h * 0.7f);
+                                        animator1.setDuration(mTime);
+                                        animator1.start();
                                     }
                                 }
                             }
                             if (valueOf.equals("14")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a5 = false;
-                                a6 = false;
-                                if (a4 == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                twelve = false;
+                                if (ten == false) {
                                     mDrawTop.setTranslationX(85 - transverse);
                                     mDrawTop.setTranslationY(420);
-                                    a4 = true;
+                                    ten = true;
                                     if (h <= 15) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -599,21 +622,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("15")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a6 = false;
-                                if (a5 == false) {
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                twelve = false;
+                                if (eleven == false) {
                                     mDrawTop.setTranslationX(50);
                                     mDrawTop.setTranslationY(450 - disparity);
-                                    a5 = true;
+                                    eleven = true;
                                     if (h <= 20) {
                                         float translationX = mDrawTop.getTranslationX();
                                         float translationY = mDrawTop.getTranslationY();
@@ -682,19 +705,19 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 }
                             }
                             if (valueOf.equals("16")) {
-                                aa = false;
-                                bb = false;
-                                cc = false;
-                                dd = false;
-                                ee = false;
-                                ff = false;
-                                a1 = false;
-                                a2 = false;
-                                a3 = false;
-                                a4 = false;
-                                a5 = false;
-                                if (a6 == false) {
-                                    a6 = true;
+                                one = false;
+                                two = false;
+                                three = false;
+                                four = false;
+                                five = false;
+                                six = false;
+                                seven = false;
+                                eight = false;
+                                nine = false;
+                                ten = false;
+                                eleven = false;
+                                if (twelve == false) {
+                                    twelve = true;
                                     mDrawTop.setTranslationX(75 - transverse);
                                     mDrawTop.setTranslationY(480);
                                     if (h <= 15) {
@@ -776,7 +799,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         String toString = buffer.toString();
                         char[] chars = HexUtil.encodeHex(buffer);
                         String bytes2HexString = ByteUtil.bytes2HexString(buffer, size);
-                        mTwotext.setText(bytes2HexString+"");
+                        //mTwotext.setText(bytes2HexString+"");
                         Log.e("121212",bytes2HexString+"      121212");
                     }
                 } catch (Exception e) {
@@ -807,15 +830,17 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         mTitle.setText("香坊站");
         mTitle.setOnClickListener(this);
         mDrawTop = findViewById(R.id.drawtop);
-        mFirsttext = findViewById(R.id.onetext);
+        /*mFirsttext = findViewById(R.id.onetext);
         mTwotext = findViewById(R.id.twotext);
-        mFirsttext.setOnClickListener(new View.OnClickListener() {
+        mFirsttext.setText("");
+        mTwotext.setText("");*/
+        /*mFirsttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dat="AA 55";
                 sendHexString(dat.replaceAll("\\s*",""),"232");
             }
-        });
+        });*/
         /*mDrawTop.setTranslationX(50-20);
         mDrawTop.setTranslationY(90 - disparity);*/
     }

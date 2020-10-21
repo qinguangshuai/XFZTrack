@@ -17,6 +17,8 @@ import com.qgsstrive.xfztrack.bjxt.FlashHelper;
 import com.qgsstrive.xfztrack.bjxt.SpUtil;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,6 +46,7 @@ public class TestActivity extends AppCompatActivity {
     String data = "AA AA A7 01 0E 0F 10 85 A0 14 00 01 00";
     private String mEncodeHexStr;
     private String mSubstring;
+    List mList = new ArrayList();
 
     /**
      * 该类用来处理handler
@@ -112,6 +115,9 @@ public class TestActivity extends AppCompatActivity {
 
         //定时器，用来移动控件
         //startTimer();
+        mList.add("123");
+        mList.add("456");
+        mList.add("789");
     }
 
     /*@Override

@@ -484,7 +484,7 @@ public class CustomActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mTrainicon = findViewById(R.id.trainicon);
+        //mTrainicon = findViewById(R.id.trainicon);
     }
 
     /**

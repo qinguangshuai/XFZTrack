@@ -33,7 +33,7 @@
         android:layout_marginTop="10dp"
         android:textColor="#F70505"
         android:textSize="20sp" />
-    <TextView
+    <!--<TextView
         android:id="@+id/onetext"
         android:text="123"
         android:textSize="20sp"
@@ -48,5 +48,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="123"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"/>-->
 </RelativeLayout>
